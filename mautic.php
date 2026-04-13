@@ -44,10 +44,6 @@ function mautic_civicrm_buildForm($formName, &$form) {
     return;
   }
 
-  if ($form->isSubmitted()) {
-    return;
-  }
-
   // Add Settings Template.
   $region = 'page-footer';
 
