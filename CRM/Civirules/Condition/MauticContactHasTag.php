@@ -6,7 +6,7 @@
 
 class CRM_Civirules_Condition_MauticContactHasTag extends CRM_Civirules_Condition {
 
-  private $conditionParams = array();
+  protected array $conditionParams = [];
 
   public function getExtraDataInputUrl($ruleConditionId) {
     return CRM_Utils_System::url('civicrm/admin/mautic/civirules/condition/mautic_contact_has_tag', 'rule_condition_id=' . $ruleConditionId);

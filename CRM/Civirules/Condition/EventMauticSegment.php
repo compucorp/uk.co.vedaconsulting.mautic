@@ -7,7 +7,7 @@ class CRM_Civirules_Condition_EventMauticSegment extends CRM_Civirules_Condition
 
   use CRM_Civirules_EventMauticTrait;
 
-  private $conditionParams = array();
+  protected array $conditionParams = [];
 
   public function getExtraDataInputUrl($ruleConditionId) {
     return FALSE;

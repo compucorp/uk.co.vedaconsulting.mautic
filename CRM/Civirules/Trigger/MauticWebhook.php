@@ -7,7 +7,7 @@ class CRM_Civirules_Trigger_MauticWebhook extends CRM_Civirules_Trigger_Post {
    * This is a pseudo entity.
    * @var string
    */
-  protected $objectName = 'MauticWebhook';
+  protected ?string $objectName = 'MauticWebhook';
 
   /**
    * Returns an array of entities on which the trigger reacts
