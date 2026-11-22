@@ -3,11 +3,9 @@
 use CRM_Mautic_ExtensionUtil as E;
 
 /**
- * Form controller class
- *
- * @see https://wiki.civicrm.org/confluence/display/CRMDOC/QuickForm+Reference
+ * Form body, shared by the two declarations below.
  */
-class CRM_Mautic_Form_Settings extends CRM_Admin_Form_Setting {
+trait CRM_Mautic_Form_SettingsBody {
 
  /**
   * {@inherit}
@@ -131,13 +129,47 @@ class CRM_Mautic_Form_Settings extends CRM_Admin_Form_Setting {
   }
 
   /**
-   * {@inheritdoc}
+   * SettingTrait doesn't map the password element type, so map it here.
    */
-  protected function getQuickFormType($spec) {
-    // SettingTrait doesn't map password element type so let's do it here.
-    if (strtolower($spec['html_type']) == 'password') {
-      return 'Element';
-    }
-    return  parent::getQuickFormType($spec);
+  protected static function mauticQuickFormType(array $spec): ?string {
+    return strtolower($spec['html_type'] ?? '') === 'password' ? 'Element' : NULL;
   }
+
+}
+
+// CiviCRM 6.20 made SettingTrait::getQuickFormType() static; 6.4 has it as an instance method. PHP
+// refuses an override of the wrong kind, so declare the class to match the core in use.
+if ((new ReflectionMethod('CRM_Admin_Form_Setting', 'getQuickFormType'))->isStatic()) {
+
+  /**
+   * Form controller class
+   *
+   * @see https://wiki.civicrm.org/confluence/display/CRMDOC/QuickForm+Reference
+   */
+  class CRM_Mautic_Form_Settings extends CRM_Admin_Form_Setting {
+    use CRM_Mautic_Form_SettingsBody;
+
+    protected static function getQuickFormType($spec) {
+      return self::mauticQuickFormType($spec) ?? parent::getQuickFormType($spec);
+    }
+
+  }
+
+}
+else {
+
+  /**
+   * Form controller class
+   *
+   * @see https://wiki.civicrm.org/confluence/display/CRMDOC/QuickForm+Reference
+   */
+  class CRM_Mautic_Form_Settings extends CRM_Admin_Form_Setting {
+    use CRM_Mautic_Form_SettingsBody;
+
+    protected function getQuickFormType($spec) {
+      return self::mauticQuickFormType($spec) ?? parent::getQuickFormType($spec);
+    }
+
+  }
+
 }
